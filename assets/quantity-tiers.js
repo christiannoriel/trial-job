@@ -58,10 +58,10 @@ class QuantityTiersComponent extends Component {
   }
 
   /**
-   * @param {Event} event - Change event from a tier radio.
+   * Bound with `on:change` on the fieldset. The framework re-targets the event to the fieldset,
+   * so read the checked radio rather than `event.target`.
    */
-  handleChange(event) {
-    if (!(event.target instanceof HTMLInputElement) || event.target.name !== 'quantity') return;
+  handleChange() {
     this.#sync();
   }
 
