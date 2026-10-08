@@ -47,7 +47,9 @@
   capture total_price
     render 'format-price', price: total
   endcapture
-  assign button_total = 'products.product.quantity_tiers.button_total' | t: total: total_price | strip_html
+  # t escapes interpolated values, so pass plain text rather than format-price's <bdi> markup.
+  assign total_text = total_price | strip_html | strip
+  assign button_total = 'products.product.quantity_tiers.button_total' | t: total: total_text
 -%}
 
 <label
