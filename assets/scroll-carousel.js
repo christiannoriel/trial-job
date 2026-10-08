@@ -151,8 +151,9 @@ class ScrollCarouselComponent extends Component {
     else if (event.key === 'End') targetIndex = items.length - 1;
     if (targetIndex === undefined || targetIndex === current) return;
 
+    // Skip deliberately unfocusable duplicates, e.g. a card's image link (tabindex="-1").
     const focusable = items[targetIndex]?.querySelector(
-      'a[href], button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ':is(a[href], button:not([disabled]), input:not([disabled]), [tabindex]):not([tabindex="-1"])'
     );
     if (!(focusable instanceof HTMLElement)) return;
 
