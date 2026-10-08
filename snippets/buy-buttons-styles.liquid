@@ -8,6 +8,8 @@
 {% stylesheet %}
   .buy-buttons-block {
     --buy-button-preferred-width: 185px;
+    /* Design: 46px buy buttons (Horizon default is padding-lg based, 52px). */
+    --height-buy-buttons: calc(var(--padding-md) * 2 + var(--icon-size-sm));
 
     width: 100%;
   }
@@ -103,6 +105,11 @@
 
   .add-to-cart-button.button-secondary {
     text-transform: var(--button-text-case-secondary);
+  }
+
+  /* Label is vertically centred by the fixed height rather than padding. */
+  .buy-buttons-block .add-to-cart-button {
+    padding-block: 0;
   }
 
   shopify-accelerated-checkout {
