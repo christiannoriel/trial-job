@@ -1,0 +1,100 @@
+{%- doc -%}
+  Renders one portrait video card for the video carousel. Uses Horizon's `video`
+  snippet, so the poster is a lazy-loaded image and the player is only injected
+  (muted, with controls) after the shopper presses play. Falls back to the poster
+  image alone when no video is chosen.
+
+  @example
+  {% content_for 'blocks' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign video = block_settings.video
+  assign poster = block_settings.poster | default: video.preview_image
+  assign description = block_settings.description | default: video.alt
+  assign sizes = '(min-width: 990px) 140px, (min-width: 750px) 25vw, 42vw'
+  assign widths = '180, 270, 360, 540'
+-%}
+
+<li
+  class="scroll-carousel__item video-carousel-item"
+  {{ block.shopify_attributes }}
+>
+  {%- if video != blank -%}
+    {% render 'video',
+      video: video,
+      video_preview_image: poster,
+      video_alt: description,
+      video_class: 'video-carousel-item__media',
+      widths: widths,
+      sizes: sizes,
+      loading: 'lazy'
+    %}
+  {%- elsif poster != blank -%}
+    <div class="video-carousel-item__media">
+      {{
+        poster
+        | image_url: width: 540
+        | image_tag: widths: widths, sizes: sizes, loading: 'lazy', alt: description, class: 'video-carousel-item__image'
+      }}
+    </div>
+  {%- else -%}
+    <div class="video-carousel-item__media video-carousel-item__media--placeholder">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'video-carousel-item__image' }}
+    </div>
+  {%- endif -%}
+</li>
+
+{% stylesheet %}
+  .video-carousel-item__media {
+    display: block;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--style-border-radius-xs);
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  }
+
+  .video-carousel-item__media :is(img, video, svg, .deferred-media__poster-button) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Smaller play icon than Horizon's default, to suit narrow portrait cards. */
+  .video-carousel-item .deferred-media__poster-icon {
+    --button-size: 1.75rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.video",
+  "tag": null,
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:settings.video"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "t:settings.cover_image",
+      "info": "t:info.video_carousel_poster"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:settings.alt_text",
+      "info": "t:info.video_carousel_description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.video"
+    }
+  ]
+}
+{% endschema %}
