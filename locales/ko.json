@@ -26,9 +26,13 @@
       "post_success": "문의해 주셔서 감사합니다. 최대한 빨리 답변드리겠습니다.",
       "error_heading": "다음을 조정하세요."
     },
-    "slider_label": "슬라이더"
+    "slider_label": "슬라이더",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "3D 모델 재생",
     "play_video": "동영상 재생",
     "unit_price": "단가",
@@ -130,6 +134,7 @@
     "zoom_media": "{{ index }} 미디어 확대/축소"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "리뷰",
     "language": "언어",
     "localization_region_and_language": "지역 및 언어",
@@ -318,6 +323,14 @@
       "added_to_cart": "카트에 추가됨",
       "adding_to_cart": "추가 중...",
       "add_to_cart_error": "카트에 추가하는 중 오류 발생",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": " - {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "품절",
       "unavailable": "사용할 수 없음",
       "quantity_error_max": "이 품목의 최대 개수는 {{ maximum }}개입니다.",

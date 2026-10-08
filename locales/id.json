@@ -26,9 +26,13 @@
       "post_success": "Terima kasih sudah menghubungi kami. Kami akan segera menghubungi Anda.",
       "error_heading": "Mohon sesuaikan:"
     },
-    "slider_label": "Slider"
+    "slider_label": "Slider",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Putar model 3D",
     "play_video": "Putar video",
     "unit_price": "Harga satuan",
@@ -130,6 +134,7 @@
     "zoom_media": "Perbesar media {{ index }}"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "ulasan",
     "language": "Bahasa",
     "localization_region_and_language": "Wilayah dan bahasa",
@@ -318,6 +323,14 @@
       "added_to_cart": "Ditambahkan ke keranjang",
       "adding_to_cart": "Menambahkan...",
       "add_to_cart_error": "Kesalahan saat menambahkan ke keranjang",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": " - {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Habis",
       "unavailable": "Tidak Tersedia",
       "quantity_error_max": "Item ini memiliki batas maksimum {{ maximum }}",

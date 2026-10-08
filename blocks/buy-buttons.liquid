@@ -110,7 +110,11 @@
             </div>
           {%- endif -%}
 
-          {% content_for 'block', type: 'quantity', id: 'quantity' %}
+          {%- if block_settings.quantity_selector == 'tiers' -%}
+            {% content_for 'block', type: 'quantity-tiers', id: 'quantity-tiers' %}
+          {%- else -%}
+            {% content_for 'block', type: 'quantity', id: 'quantity' %}
+          {%- endif -%}
 
           {%- if has_quantity_rules -%}
             <div
@@ -231,12 +235,14 @@
             add_to_cart_text: add_to_cart_text
           %}
 
-          {% content_for 'block',
-            type: 'accelerated-checkout',
-            id: 'accelerated-checkout',
-            can_add_to_cart: can_add_to_cart,
-            form_obj: form
-          %}
+          {%- if block_settings.show_accelerated_checkout -%}
+            {% content_for 'block',
+              type: 'accelerated-checkout',
+              id: 'accelerated-checkout',
+              can_add_to_cart: can_add_to_cart,
+              form_obj: form
+            %}
+          {%- endif -%}
         </div>
         {%- if block_settings.gift_card_form and product.gift_card? -%}
           </span>
@@ -396,6 +402,29 @@
       "id": "stacking",
       "label": "t:settings.always_stack_buttons",
       "default": false
+    },
+    {
+      "type": "select",
+      "id": "quantity_selector",
+      "label": "t:settings.quantity_selector",
+      "options": [
+        {
+          "value": "stepper",
+          "label": "t:options.quantity_stepper"
+        },
+        {
+          "value": "tiers",
+          "label": "t:options.quantity_tiers"
+        }
+      ],
+      "default": "stepper",
+      "info": "t:info.quantity_selector_tiers"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_accelerated_checkout",
+      "label": "t:settings.show_dynamic_checkout",
+      "default": true
     },
     {
       "type": "color",
@@ -627,6 +656,36 @@
         "quantity": {
           "type": "quantity",
           "static": true
+        },
+        "quantity-tiers": {
+          "type": "quantity-tiers",
+          "static": true,
+          "blocks": {
+            "tier_1": {
+              "type": "_quantity-tier",
+              "settings": {
+                "quantity": 1
+              }
+            },
+            "tier_2": {
+              "type": "_quantity-tier",
+              "settings": {
+                "quantity": 2,
+                "discount_percent": 15,
+                "free_shipping": true,
+                "selected": true
+              }
+            },
+            "tier_3": {
+              "type": "_quantity-tier",
+              "settings": {
+                "quantity": 3,
+                "discount_percent": 20,
+                "free_shipping": true
+              }
+            }
+          },
+          "block_order": ["tier_1", "tier_2", "tier_3"]
         },
         "add-to-cart": {
           "type": "add-to-cart",

@@ -1,0 +1,256 @@
+{%- doc -%}
+  Renders one bundle tier: a radio input plus its label, savings badge and prices.
+  The tier is disabled when its quantity breaks the variant's quantity rules or
+  exceeds stock that can't be oversold.
+
+  @example
+  {% content_for 'blocks' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+
+  assign quantity = block_settings.quantity
+  assign percent = block_settings.discount_percent
+  assign full_total = variant.price | times: quantity
+  assign discount_amount = full_total | times: percent | divided_by: 100.0 | round
+  assign total = full_total | minus: discount_amount
+
+  assign label = block_settings.label
+  if label == blank
+    assign label = 'products.product.quantity_tiers.label' | t: quantity: quantity
+  endif
+
+  assign badge = block_settings.badge
+  if badge == blank and percent > 0
+    assign badge = 'products.product.quantity_tiers.save_percent' | t: percent: percent
+  endif
+
+  assign disabled = false
+  assign rule = variant.quantity_rule
+  assign increment = rule.increment | default: 1
+  assign increment_remainder = quantity | modulo: increment
+  if quantity < rule.min or increment_remainder != 0
+    assign disabled = true
+  endif
+  if rule.max != null and quantity > rule.max
+    assign disabled = true
+  endif
+  if variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.available
+    if quantity > variant.inventory_quantity
+      assign disabled = true
+    endif
+  endif
+
+  capture total_price
+    render 'format-price', price: total
+  endcapture
+  assign button_total = 'products.product.quantity_tiers.button_total' | t: total: total_price | strip_html
+-%}
+
+<label
+  class="quantity-tier{% if disabled %} quantity-tier--disabled{% endif %}"
+  {{ block.shopify_attributes }}
+>
+  <input
+    class="quantity-tier__input"
+    type="radio"
+    name="quantity"
+    value="{{ quantity }}"
+    ref="inputs[]"
+    data-button-total="{{ button_total | escape }}"
+    {% if block_settings.selected and disabled == false %}
+      checked
+    {% endif %}
+    {% if disabled %}
+      disabled
+    {% endif %}
+  >
+  {%- if badge != blank -%}
+    <span class="quantity-tier__badge">{{ badge | escape }}</span>
+  {%- endif -%}
+  <span class="quantity-tier__label">{{ label | escape }}</span>
+  <span class="quantity-tier__prices">
+    <span class="visually-hidden">{{ 'content.price_sale' | t }}</span>
+    <span class="quantity-tier__price">{{ total_price }}</span>
+    {%- if discount_amount > 0 -%}
+      <span class="visually-hidden">{{ 'content.price_regular' | t }}</span>
+      <s class="quantity-tier__compare">{% render 'format-price', price: full_total %}</s>
+    {%- endif -%}
+  </span>
+  {%- if block_settings.free_shipping -%}
+    <span class="quantity-tier__perk">{{ 'products.product.quantity_tiers.free_shipping' | t }}</span>
+  {%- endif -%}
+</label>
+
+{% stylesheet %}
+  .quantity-tier {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-2xs);
+    min-width: 0;
+    min-height: 100%;
+    padding: var(--padding-lg) var(--padding-xs);
+    border: var(--style-border-width) solid var(--color-variant-border);
+    border-radius: var(--style-border-radius-sm);
+    background-color: var(--color-variant-background);
+    color: var(--color-variant-text);
+    text-align: center;
+    cursor: pointer;
+    transition: background-color var(--animation-speed) var(--animation-easing),
+      border-color var(--animation-speed) var(--animation-easing);
+  }
+
+  .quantity-tier:hover {
+    border-color: var(--color-variant-hover-border);
+  }
+
+  .quantity-tier:has(.quantity-tier__input:checked) {
+    border-color: var(--color-selected-variant-border);
+    background-color: var(--color-selected-variant-background);
+    color: var(--color-selected-variant-text);
+  }
+
+  .quantity-tier:has(.quantity-tier__input:focus-visible) {
+    outline: var(--focus-outline-width) solid currentcolor;
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .quantity-tier--disabled {
+    cursor: not-allowed;
+    opacity: var(--opacity-50);
+  }
+
+  /* The native radio covers the whole card: one hit area, native keyboard behaviour. */
+  .quantity-tier__input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+
+  .quantity-tier__badge {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 50%;
+    translate: -50% -50%;
+    padding: 0.15em 0.75em;
+    border-radius: var(--style-border-radius-pills);
+    background-color: var(--color-primary-button-background);
+    color: var(--color-primary-button-text);
+    font-size: var(--font-size--2xs);
+    font-weight: var(--font-heading--weight);
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  [dir='rtl'] .quantity-tier__badge {
+    translate: 50% -50%;
+  }
+
+  .quantity-tier__label {
+    font-weight: var(--font-heading--weight);
+  }
+
+  .quantity-tier__prices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.35em;
+    font-weight: var(--font-heading--weight);
+  }
+
+  .quantity-tier__compare {
+    font-weight: var(--font-body--weight);
+    opacity: var(--opacity-70);
+  }
+
+  .quantity-tier__perk {
+    font-size: var(--font-size--2xs);
+    font-weight: var(--font-heading--weight);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 749px) {
+    .quantity-tier {
+      padding: var(--padding-md) var(--padding-2xs);
+      font-size: var(--font-size--sm);
+    }
+
+    .quantity-tier__prices {
+      font-size: var(--font-size--xs);
+    }
+
+    .quantity-tier__badge,
+    .quantity-tier__perk {
+      font-size: var(--font-size--3xs);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.quantity_tier",
+  "tag": null,
+  "settings": [
+    {
+      "type": "range",
+      "id": "quantity",
+      "label": "t:settings.quantity",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "discount_percent",
+      "label": "t:settings.discount_percent",
+      "info": "t:info.quantity_tier_discount",
+      "min": 0,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 0
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:settings.label",
+      "info": "t:info.quantity_tier_label"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "t:settings.badge",
+      "info": "t:info.quantity_tier_badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "free_shipping",
+      "label": "t:settings.show_free_shipping",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "selected",
+      "label": "t:settings.selected_by_default",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.quantity_tier"
+    }
+  ]
+}
+{% endschema %}

@@ -107,8 +107,13 @@
           <span class="rating-count-separator">|</span>
         {%- endif -%}
         {%- if block_settings.show_number -%}
-          {{- rating_count }}
-          {{ 'content.reviews' | t }}
+          {%- if block_settings.count_format == 'compact' -%}
+            <span aria-hidden="true">({{ rating_count }})</span>
+            <span class="visually-hidden">{{ rating_count }} {{ 'content.reviews' | t }}</span>
+          {%- else -%}
+            {{- rating_count }}
+            {{ 'content.reviews' | t }}
+          {%- endif -%}
         {%- endif -%}
       </p>
     {%- endif -%}
@@ -201,6 +206,23 @@
       "id": "show_number",
       "label": "t:settings.review_count",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "count_format",
+      "label": "t:settings.review_count_format",
+      "options": [
+        {
+          "value": "label",
+          "label": "t:options.review_count_label"
+        },
+        {
+          "value": "compact",
+          "label": "t:options.review_count_compact"
+        }
+      ],
+      "default": "label",
+      "visible_if": "{{ block.settings.show_number }}"
     },
     {
       "type": "color",

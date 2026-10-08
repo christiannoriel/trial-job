@@ -26,9 +26,13 @@
       "post_success": "Kiitos yhteydenotostasi. Vastaamme sinulle mahdollisimman pian.",
       "error_heading": "Muokkaa seuraavia:"
     },
-    "slider_label": "Liukusäädin"
+    "slider_label": "Liukusäädin",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Toista 3D-malli",
     "play_video": "Toista video",
     "unit_price": "Yksikköhinta",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "Takaisin päävalikkoon"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "arvostelua",
     "language": "Kieli",
     "localization_region_and_language": "Alue ja kieli",
@@ -318,6 +323,14 @@
       "added_to_cart": "Lisätty ostoskoriin",
       "adding_to_cart": "Lisätään...",
       "add_to_cart_error": "Ostoskoriin lisättäessä tapahtui virhe",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": " - {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Loppuunmyyty",
       "unavailable": "Ei käytettävissä",
       "quantity_error_max": "Tämän tuotteen enimmäismäärä on {{ maximum }}",
