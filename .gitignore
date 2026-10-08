@@ -1,0 +1,57 @@
+# === OS & Editor ===
+.DS_Store
+Thumbs.db
+._*
+.idea/
+.vscode/
+
+# === Node ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === Logs ===
+*.log
+logs/
+*.tsbuildinfo
+
+# === Shopify CLI ===
+.env
+.env.local
+.env.*
+!.env.example
+
+.shopify/
+.cache/
+*.pem
+
+# === Build Output ===
+dist/
+build/
+public/
+coverage/
+
+# === Tool Caches ===
+.sass-cache/
+.parcel-cache/
+.vite/
+.turbo/
+.eslintcache
+
+# === Temporary Files ===
+*.swp
+*.tmp
+*~
+
+# === AI Tools ===
+.devin/
+devin-logs/
+devin-cache/
+.claude/
+
+# === Archives ===
+*.tgz
+
+# === Test output ===
+tests/*-results.json

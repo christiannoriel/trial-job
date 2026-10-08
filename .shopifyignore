@@ -1,0 +1,28 @@
+# Files that live in the repo but must never reach a Shopify theme.
+# Without this file, `shopify theme push` uploads everything at the repo root.
+
+# Documentation and audit output
+*.md
+
+# Tooling / local-only
+tests/*
+.github/*
+.claude/*
+.shopify/*
+.vscode/*
+.idea/*
+.git/*
+.gitignore
+.shopifyignore
+.env*
+
+# OS noise
+.DS_Store
+Thumbs.db
+._*
+
+# Node
+node_modules/*
+package.json
+package-lock.json
+yarn.lock
