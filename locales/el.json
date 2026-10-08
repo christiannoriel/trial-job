@@ -26,9 +26,13 @@
       "post_success": "Ευχαριστούμε που επικοινωνήσατε μαζί μας. Θα σας απαντήσουμε το συντομότερο δυνατόν.",
       "error_heading": "Προσαρμόστε τα παρακάτω:"
     },
-    "slider_label": "Ρυθμιστικό"
+    "slider_label": "Ρυθμιστικό",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Αναπαραγωγή μοντέλου 3D",
     "play_video": "Αναπαραγωγή βίντεο",
     "unit_price": "Τιμή μονάδας",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "Επιστροφή στο κύριο μενού"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "κριτικές",
     "no_results_found": "Δεν βρέθηκαν αποτελέσματα",
     "language": "Γλώσσα",
@@ -318,6 +323,14 @@
       "added_to_cart": "Προστέθηκε στο καλάθι",
       "adding_to_cart": "Προσθήκη...",
       "add_to_cart_error": "Παρουσιάστηκε σφάλμα κατά την προσθήκη στο καλάθι",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Εξαντλήθηκε",
       "unavailable": "Μη διαθέσιμο",
       "quantity_error_max": "Αυτό το προϊόν έχει μέγιστο όριο {{ maximum }}",

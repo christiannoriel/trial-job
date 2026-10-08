@@ -12,6 +12,10 @@
   assign scoped_class = block.settings.style_class | append: '--' | append: block.id
   assign class = 'add-to-cart-button ' | append: block.settings.style_class | append: ' ' | append: scoped_class
   assign id = 'BuyButtons-ProductSubmitButton-' | append: block.id
+  assign show_icon = false
+  if can_add_to_cart and block.settings.show_cart_icon
+    assign show_icon = true
+  endif
 %}
 {% render 'button-custom-styles', block_settings: block.settings, block_id: block.id %}
 {% render 'add-to-cart-button-styles' %}
@@ -25,7 +29,7 @@
     id: id,
     class: class,
     can_add_to_cart: can_add_to_cart,
-    show_icon: can_add_to_cart,
+    show_icon: show_icon,
     product: closest.product,
     add_to_cart_text: add_to_cart_text,
     data_testid: 'standalone-add-to-cart'
@@ -57,6 +61,12 @@
       ],
       "default": "button-secondary",
       "info": "t:info.edit_button_style_in_theme_settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_icon",
+      "label": "t:settings.show_cart_icon",
+      "default": true
     },
     {
       "type": "header",

@@ -11,6 +11,7 @@
   "accessibility": {
     "account": "الحساب",
     "active_filters": "عوامل التصفية النشطة:",
+    "carousel": "Carousel",
     "cart": "سلة التسوق",
     "cart_count": "إجمالي العناصر في سلة التسوق",
     "close_dialog": "إغلاق مربع الحوار",
@@ -135,7 +136,10 @@
     "load_video": "تحميل الفيديو: {{ description }}",
     "sold_out": "نفد المخزون",
     "payment_methods": "طرق الدفع",
-    "slider_label": "شريط التمرير"
+    "slider_label": "شريط التمرير",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "blogs": {
     "article": {
@@ -165,6 +169,7 @@
     "cancel": "إلغاء",
     "discount": "الخصم",
     "account_title": "الحساب",
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "terms_and_policies": "الشروط والسياسات",
     "account_title_personalized": "مرحبًا {{ first_name }}",
     "account_orders": "الطلبات",
@@ -369,7 +374,15 @@
       "adding_to_cart": "جاري الإضافة...",
       "added_to_cart": "تمت الإضافة إلى سلة التسوق",
       "add_to_cart_error": "حدث خطأ أثناء الإضافة إلى سلة التسوق",
+      "choose_options": "Choose options",
       "quantity_error_max": "الحد الأقصى لهذا العنصر هو {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "نفد المخزون",
       "unavailable": "غير متوفر",
       "quantity": "الكمية",

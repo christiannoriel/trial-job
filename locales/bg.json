@@ -26,9 +26,13 @@
       "post_success": "Благодарим, че се свързахте с нас. Ще се свържем с вас възможно най-скоро.",
       "error_heading": "Коригирайте следното:"
     },
-    "slider_label": "Плъзгач"
+    "slider_label": "Плъзгач",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Възпроизвеждане на 3D модел",
     "play_video": "Възпроизвеждане на видеоклип",
     "unit_price": "Единична цена",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "Назад към главното меню"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "мнения",
     "language": "Език",
     "localization_region_and_language": "Регион и език",
@@ -318,6 +323,14 @@
       "adding_to_cart": "Добавяне...",
       "added_to_cart": "Добавено в количката",
       "add_to_cart_error": "Грешка при добавянето в количката",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Изчерпано",
       "unavailable": "Неналично",
       "quantity_error_max": "За този артикул има максимум от {{ maximum }}",

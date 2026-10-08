@@ -26,9 +26,13 @@
       "post_success": "Спасибо за обращение. Мы свяжемся с вами как можно скорее.",
       "error_heading": "Измените следующие элементы:"
     },
-    "slider_label": "Ползунок"
+    "slider_label": "Ползунок",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Открыть объемную модель",
     "play_video": "Воспроизвести видео",
     "unit_price": "Цена за единицу",
@@ -134,6 +138,7 @@
     "back_to_main_menu": "Назад в главное меню"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "отз.",
     "no_results_found": "Результатов не найдено",
     "language": "Язык",
@@ -355,7 +360,15 @@
       "adding_to_cart": "Добавление...",
       "added_to_cart": "Товар добавлен в корзину",
       "add_to_cart_error": "Возникла ошибка при добавлении в корзину",
+      "choose_options": "Choose options",
       "quantity_error_max": "Максимальное количество этого товара — {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Продано",
       "unavailable": "Недоступно",
       "quantity": "Количество",

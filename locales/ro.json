@@ -26,9 +26,13 @@
       "error_heading": "Ajustează următoarele:"
     },
     "payment_methods": "Metode de plată",
-    "slider_label": "Cursor"
+    "slider_label": "Cursor",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Redă modelul 3D",
     "play_video": "Redă videoclipul",
     "unit_price": "Preț unitar",
@@ -132,6 +136,7 @@
     "zoom_media": "Fă zoom pe elementul media {{ index }}"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "recenzii",
     "language": "Limba",
     "localization_region_and_language": "Regiunea și limba",
@@ -348,7 +353,15 @@
       "adding_to_cart": "Se adaugă...",
       "added_to_cart": "Adăugat în coș",
       "add_to_cart_error": "Eroare la adăugarea în coș",
+      "choose_options": "Choose options",
       "quantity_error_max": "Acest articol are maxim {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Stoc epuizat",
       "unavailable": "Indisponibil",
       "quantity": "Cantitate",

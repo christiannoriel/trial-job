@@ -26,9 +26,13 @@
       "post_success": "Ďakujeme, že ste nás kontaktovali. Budeme sa vám venovať čo najskôr.",
       "error_heading": "Upravte tieto údaje:"
     },
-    "slider_label": "Jazdec"
+    "slider_label": "Jazdec",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Prehrať 3D model",
     "play_video": "Prehrať video",
     "unit_price": "Jednotková cena",
@@ -134,6 +138,7 @@
     "back_to_main_menu": "Späť do hlavnej ponuky"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "recenz.",
     "no_results_found": "Nenašli sa žiadne výsledky",
     "language": "Jazyk",
@@ -355,7 +360,15 @@
       "adding_to_cart": "Pridávanie...",
       "added_to_cart": "Pridané do košíka",
       "add_to_cart_error": "Chyba pri pridávaní do košíka",
+      "choose_options": "Choose options",
       "quantity_error_max": "Maximálne množstvo tejto položky je {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Vypredané",
       "unavailable": "Nedostupné",
       "quantity": "Množstvo",

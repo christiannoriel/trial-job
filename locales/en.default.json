@@ -11,6 +11,7 @@
   "accessibility": {
     "account": "Account",
     "active_filters": "Active filters:",
+    "carousel": "Carousel",
     "cart": "Cart",
     "cart_count": "Total items in cart",
     "close_dialog": "Close dialog",
@@ -140,7 +141,10 @@
     "load_video": "Load video: {{ description }}",
     "sold_out": "Sold out",
     "payment_methods": "Payment methods",
-    "slider_label": "Slider"
+    "slider_label": "Slider",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "blogs": {
     "article": {
@@ -166,6 +170,7 @@
     "cancel": "Cancel",
     "discount": "Discount",
     "account_title": "Account",
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "terms_and_policies": "Terms and Policies",
     "account_title_personalized": "Hi {{ first_name }}",
     "account_orders": "Orders",
@@ -360,7 +365,15 @@
       "adding_to_cart": "Adding...",
       "added_to_cart": "Added to cart",
       "add_to_cart_error": "Error adding to cart",
+      "choose_options": "Choose options",
       "quantity_error_max": "This item has a maximum of {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Sold out",
       "unavailable": "Unavailable",
       "quantity": "Quantity",
