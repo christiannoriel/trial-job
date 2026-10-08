@@ -402,4 +402,45 @@
     /><path
       d="M12.91 5.362h1.083v3.274H12.91V5.362Zm-2.98 0h1.084v3.274H9.93V5.362Z"
     />
+  {%- comment -%} Stroke-based icons: fill is reset so the parent `.icon-default` fill doesn't flood the outline. {%- endcomment -%}
+  {%- when 'australia' -%}
+    <path
+      d="M2.2 8.6 3.9 7l2.2-.4 1.1-1.9 1.9.9.7-1.7 2.1-.3 1 1.2.6-2.9 1.5 2.6 1.7 1.9 1.4 2.8-.4 2.6-1.6 2.3-1.4 1.9-2.4.6-1.6-1.4-1.4.4-1.1-1.2-2.4-.2-2.3.8-1.6-.6.3-2.4-.8-2.2Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-linejoin="round"
+    />
+    <path d="m14.2 17.4 1.2.1-.4 1.1-.9-.4Z" fill="none" stroke="currentColor" stroke-linejoin="round" />
+  {%- when 'check_circle' -%}
+    <circle cx="10" cy="10" r="8.5" fill="none" stroke="currentColor" />
+    <path
+      d="m6.6 10.2 2.3 2.3 4.6-4.8"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  {%- when 'rabbit' -%}
+    <path
+      d="M8 9c-1.2-2.4-1.6-6.3-.2-6.6 1.4-.3 2.1 3.3 2 6M10.9 8.9c.4-2.6 1.6-5.9 2.8-5.4 1.2.5.3 3.9-1.1 6.1M4.8 14.2c0-2.8 2.2-5 5-5 2.6 0 4.6 1.9 4.6 4.3 0 .5-.1 1-.2 1.4h1.9a1.5 1.5 0 0 1 0 3H6.6a1.8 1.8 0 0 1-1.8-1.8v-1.9Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle cx="8.2" cy="12.4" r=".7" />
+  {%- when 'shield_check' -%}
+    <path
+      d="M10 1.5 3.5 4v5.2c0 4.1 2.8 7.6 6.5 9.3 3.7-1.7 6.5-5.2 6.5-9.3V4L10 1.5Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-linejoin="round"
+    />
+    <path
+      d="m7 10 2.2 2.2L13.3 8"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
 {%- endcase -%}
