@@ -1,0 +1,155 @@
+{%- doc -%}
+  Renders a row of short-form (UGC) videos in a scroll-snap carousel.
+
+  In a live store this content usually comes from a shoppable-video app (e.g. Tolstoy,
+  Videowise), added as an app block in this position. This native version uses videos
+  uploaded to Shopify Files and loads nothing until a shopper presses play: posters are
+  lazy-loaded images and each player is injected on demand by Horizon's deferred-media.
+
+  Videos come from the `videos` setting (a list of `product_video` metaobject entries, usually
+  connected to the product's `custom.product_videos` metafield) when it has entries, and from
+  the video blocks otherwise.
+
+  @example
+  {% content_for 'block', type: 'custom-video-carousel', id: 'ugc' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign carousel_id = 'VideoCarousel-' | append: block.id
+  assign label = block_settings.label
+  if label == blank
+    assign label = 'blocks.video_carousel.label' | t
+  endif
+
+  capture items
+    if block_settings.videos != blank
+      for entry in block_settings.videos
+        render 'custom-video-carousel-item', video: entry.video.value, video_link: entry.video_url.value, poster: entry.cover_image.value, description: entry.title.value
+      endfor
+    else
+      content_for 'blocks'
+    endif
+  endcapture
+-%}
+
+{%- if items != blank -%}
+  <div
+    class="video-carousel spacing-style"
+    style="{% render 'spacing-style', settings: block_settings %}"
+    {{ block.shopify_attributes }}
+  >
+    {% render 'custom-scroll-carousel',
+      id: carousel_id,
+      items: items,
+      label: label,
+      columns: block_settings.videos_per_view,
+      columns_tablet: block_settings.videos_per_view,
+      columns_mobile: block_settings.videos_per_view_mobile,
+      arrow_style: 'overlay',
+      class: 'video-carousel__carousel'
+    %}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .video-carousel {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .video-carousel__carousel {
+    --scroll-carousel-gap: var(--gap-xs);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.video_carousel",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_custom-video-carousel-item"
+    }
+  ],
+  "settings": [
+    {
+      "type": "metaobject_list",
+      "id": "videos",
+      "label": "t:settings.videos",
+      "info": "t:info.video_carousel_videos",
+      "metaobject_type": "product_video",
+      "limit": 20
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:settings.accessible_label",
+      "info": "t:info.video_carousel_label"
+    },
+    {
+      "type": "range",
+      "id": "videos_per_view",
+      "label": "t:settings.videos_per_view",
+      "min": 1,
+      "max": 5,
+      "step": 0.5,
+      "default": 3.5
+    },
+    {
+      "type": "range",
+      "id": "videos_per_view_mobile",
+      "label": "t:settings.videos_per_view_mobile",
+      "min": 1,
+      "max": 3,
+      "step": 0.1,
+      "default": 2.4
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.video_carousel",
+      "category": "t:categories.storytelling",
+      "blocks": {
+        "video_1": {
+          "type": "_custom-video-carousel-item"
+        },
+        "video_2": {
+          "type": "_custom-video-carousel-item"
+        },
+        "video_3": {
+          "type": "_custom-video-carousel-item"
+        },
+        "video_4": {
+          "type": "_custom-video-carousel-item"
+        }
+      },
+      "block_order": ["video_1", "video_2", "video_3", "video_4"]
+    }
+  ]
+}
+{% endschema %}

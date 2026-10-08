@@ -1,0 +1,126 @@
+{%- doc -%}
+  Renders one portrait video card (`<li>`) for the video carousel, from a Shopify video
+  or a YouTube/Vimeo link. Shared by the video block and the `product_video` metaobject list,
+  and owns the card CSS.
+
+  Uses Horizon's `video` snippet, so the poster is a lazy-loaded image and the player is
+  only injected after the shopper presses play. Links without a cover image embed the
+  player directly (lazy-loaded). Falls back to the poster image alone, then a placeholder.
+
+  @param {object} [video] - Shopify video object; takes priority over `video_link`
+  @param {string} [video_link] - YouTube (watch, youtu.be, Shorts, embed) or Vimeo link
+  @param {object} [poster] - Cover image; defaults to the Shopify video's preview image
+  @param {string} [description] - Screen reader text for the video
+  @param {string} [attributes] - Extra attributes for the `<li>`, e.g. block.shopify_attributes
+
+  @example
+  {% render 'custom-video-carousel-item', video_link: entry.video_url.value, poster: entry.cover_image.value, description: entry.title.value %}
+{%- enddoc -%}
+
+{%- liquid
+  assign sizes = '(min-width: 990px) 140px, (min-width: 750px) 25vw, 42vw'
+  assign widths = '180, 270, 360, 540'
+  assign video_id = ''
+  assign video_type = ''
+
+  if video != blank
+    assign poster = poster | default: video.preview_image
+    assign description = description | default: video.alt
+  elsif video_link != blank
+    # Read the ID from the link ourselves: Shopify's `video_url` setting rejects Shorts links.
+    assign video_link = video_link | strip
+    assign video_path = video_link | split: '?' | first | split: '#' | first
+
+    if video_link contains 'vimeo.com'
+      assign video_type = 'vimeo'
+      assign video_segments = video_path | split: '/'
+      for segment in video_segments
+        assign segment_number = segment | plus: 0 | append: ''
+        if segment_number == segment and segment_number != '0'
+          assign video_id = segment
+          break
+        endif
+      endfor
+    elsif video_link contains 'youtu'
+      assign video_type = 'youtube'
+      if video_link contains 'v='
+        assign video_id = video_link | split: 'v=' | last | split: '&' | first | split: '#' | first
+      else
+        assign video_id = video_path | split: '/' | last
+      endif
+    endif
+
+    assign video_id = video_id | url_encode
+  endif
+
+  if description == blank
+    assign description = 'blocks.video_carousel.label' | t
+  endif
+-%}
+
+<li
+  class="scroll-carousel__item video-carousel-item"
+  {{ attributes }}
+>
+  {%- if video != blank -%}
+    {% render 'video',
+      video: video,
+      video_preview_image: poster,
+      video_alt: description,
+      video_class: 'video-carousel-item__media',
+      widths: widths,
+      sizes: sizes,
+      loading: 'lazy'
+    %}
+  {%- elsif video_id != blank -%}
+    {% render 'video',
+      video_from_url: true,
+      video: video_id,
+      video_type: video_type,
+      video_preview_image: poster,
+      video_alt: description,
+      video_class: 'video-carousel-item__media',
+      widths: widths,
+      sizes: sizes,
+      loading: 'lazy'
+    %}
+  {%- elsif poster != blank -%}
+    <div class="video-carousel-item__media">
+      {{
+        poster
+        | image_url: width: 540
+        | image_tag: widths: widths, sizes: sizes, loading: 'lazy', alt: description, class: 'video-carousel-item__image'
+      }}
+    </div>
+  {%- else -%}
+    <div class="video-carousel-item__media video-carousel-item__media--placeholder">
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'video-carousel-item__image' }}
+    </div>
+  {%- endif -%}
+</li>
+
+{% stylesheet %}
+  .video-carousel-item__media {
+    display: block;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    border-radius: var(--style-border-radius-xs);
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  }
+
+  .video-carousel-item__media :is(img, video, svg, iframe, .deferred-media__poster-button) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .video-carousel-item__media iframe {
+    border: 0;
+  }
+
+  /* Smaller play icon than Horizon's default, to suit narrow portrait cards. */
+  .video-carousel-item .deferred-media__poster-icon {
+    --button-size: 1.75rem;
+  }
+{% endstylesheet %}

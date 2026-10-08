@@ -1,0 +1,81 @@
+{%- doc -%}
+  One video in the video carousel: a video uploaded to Shopify or a pasted YouTube
+  (including Shorts) or Vimeo link. Rendering and CSS live in `custom-video-carousel-item`.
+
+  @example
+  {% content_for 'blocks' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  if block_settings.source == 'url'
+    assign video = nil
+    assign video_link = block_settings.video_url
+  else
+    assign video = block_settings.video
+    assign video_link = nil
+  endif
+-%}
+
+{% render 'custom-video-carousel-item',
+  video: video,
+  video_link: video_link,
+  poster: block_settings.poster,
+  description: block_settings.description,
+  attributes: block.shopify_attributes
+%}
+
+{% schema %}
+{
+  "name": "t:names.video",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "source",
+      "label": "t:settings.video_source",
+      "options": [
+        {
+          "value": "uploaded",
+          "label": "t:options.video_uploaded"
+        },
+        {
+          "value": "url",
+          "label": "t:options.video_external_url"
+        }
+      ],
+      "default": "uploaded"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:settings.video",
+      "visible_if": "{{ block.settings.source == 'uploaded' }}"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "t:settings.video_external_url",
+      "info": "t:info.video_carousel_url",
+      "visible_if": "{{ block.settings.source == 'url' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "t:settings.cover_image",
+      "info": "t:info.video_carousel_poster"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "t:settings.alt_text",
+      "info": "t:info.video_carousel_description"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.video"
+    }
+  ]
+}
+{% endschema %}
