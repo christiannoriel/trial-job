@@ -11,6 +11,7 @@
   "accessibility": {
     "account": "חשבון",
     "active_filters": "מסננים פעילים:",
+    "carousel": "Carousel",
     "cart": "סל",
     "cart_count": "סך כל הפריטים בסל",
     "close_dialog": "סגירת הדו-שיח",
@@ -131,7 +132,10 @@
     "load_video": "טעינת הסרטון: {{ description }}",
     "sold_out": "אזל מהמלאי",
     "payment_methods": "אמצעי תשלום",
-    "slider_label": "סליידר"
+    "slider_label": "סליידר",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "blogs": {
     "article": {
@@ -159,6 +163,7 @@
     "cancel": "ביטול",
     "discount": "הנחה",
     "account_title": "חשבון",
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "terms_and_policies": "תנאים ומדיניות",
     "account_title_personalized": "היי {{ first_name }}",
     "account_orders": "הזמנות",
@@ -355,7 +360,15 @@
       "adding_to_cart": "מוסיף...",
       "added_to_cart": "נוסף לסל",
       "add_to_cart_error": "שגיאה בהוספה לסל",
+      "choose_options": "Choose options",
       "quantity_error_max": "לפריט זה יש מקסימום של {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "אזל מהמלאי",
       "unavailable": "לא זמין",
       "quantity": "כמות",

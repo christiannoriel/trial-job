@@ -26,9 +26,13 @@
       "post_success": "お問い合わせいただきありがとうございます。早急に返信いたします。",
       "error_heading": "以下を確認してください。"
     },
-    "slider_label": "スライダー"
+    "slider_label": "スライダー",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "3Dモデルを再生",
     "play_video": "ビデオを再生",
     "unit_price": "単価",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "メインメニューに戻る"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "レビュー",
     "language": "言語",
     "localization_region_and_language": "地域と言語",
@@ -318,6 +323,14 @@
       "added_to_cart": "カートに追加済み",
       "adding_to_cart": "追加中...",
       "add_to_cart_error": "カートに追加する際にエラーが発生しました",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "売り切れ",
       "unavailable": "利用できません",
       "quantity_error_max": "このアイテムの最大値は{{ maximum }}です",

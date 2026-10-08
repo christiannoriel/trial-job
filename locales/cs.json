@@ -26,9 +26,13 @@
       "post_success": "Děkujeme, že jste nás kontaktovali. Ozveme se vám co možná nejdříve.",
       "error_heading": "Upravte prosím následující informace:"
     },
-    "slider_label": "Posuvník"
+    "slider_label": "Posuvník",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Přehrát 3D model",
     "play_video": "Přehrát video",
     "unit_price": "Jednotková cena",
@@ -134,6 +138,7 @@
     "back_to_main_menu": "Zpět do hlavní nabídky"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "recen.",
     "language": "Jazyk",
     "localization_region_and_language": "Oblast a jazyk",
@@ -330,6 +335,14 @@
       "adding_to_cart": "Přidávání do košíku...",
       "added_to_cart": "Přidáno do košíku",
       "add_to_cart_error": "Chyba při přidávání do košíku",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Vyprodáno",
       "unavailable": "Není k dispozici",
       "quantity_error_max": "Maximum této položky je: {{ maximum }}",

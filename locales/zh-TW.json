@@ -26,9 +26,13 @@
       "post_success": "感謝您聯絡我們。我們會盡快回覆您。",
       "error_heading": "請調整以下內容："
     },
-    "slider_label": "投影播放器"
+    "slider_label": "投影播放器",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "播放 3D 模型",
     "play_video": "播放影片",
     "unit_price": "單價",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "返回主選單"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "評論數",
     "no_results_found": "找不到結果",
     "language": "語言",
@@ -341,7 +346,15 @@
       "adding_to_cart": "正在新增…",
       "added_to_cart": "已放入購物車",
       "add_to_cart_error": "加入購物車時發生錯誤",
+      "choose_options": "Choose options",
       "quantity_error_max": "此品項上限為 {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "售罄",
       "unavailable": "無可用資料",
       "quantity": "數量",

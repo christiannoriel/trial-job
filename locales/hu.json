@@ -26,9 +26,13 @@
       "post_success": "Köszönjük, hogy írtál nekünk. A lehető legrövidebb időn belül válaszolni fogunk.",
       "error_heading": "Kérjük, helyesbítsd a következőket:"
     },
-    "slider_label": "Csúszka"
+    "slider_label": "Csúszka",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "3D-modell lejátszása",
     "play_video": "Videó lejátszása",
     "unit_price": "Egységár",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "Vissza a főmenübe"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "összegzés",
     "no_results_found": "Nincs találat",
     "language": "Nyelv",
@@ -341,7 +346,15 @@
       "adding_to_cart": "Hozzáadás…",
       "added_to_cart": "Hozzáadva a kosárhoz",
       "add_to_cart_error": "Nem tudtuk hozzáadni a terméket a kosárhoz",
+      "choose_options": "Choose options",
       "quantity_error_max": "A tétel maximális mennyisége {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Elfogyott",
       "unavailable": "Nincs készleten",
       "quantity": "Mennyiség",

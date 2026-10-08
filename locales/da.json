@@ -26,9 +26,13 @@
       "post_success": "Tak for din henvendelse. Vi kontakter dig hurtigst muligt.",
       "error_heading": "Juster følgende:"
     },
-    "slider_label": "Billedkarrusel"
+    "slider_label": "Billedkarrusel",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Afspil 3D-model",
     "play_video": "Afspil video",
     "unit_price": "Stykpris",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "Tilbage til hovedmenu"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "anmeldelser",
     "language": "Sprog",
     "localization_region_and_language": "Område og sprog",
@@ -318,6 +323,14 @@
       "added_to_cart": "Lagt i indkøbskurv",
       "adding_to_cart": "Tilføjer...",
       "add_to_cart_error": "Der opstod en fejl, da du lagde varen i indkøbskurven",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Udsolgt",
       "unavailable": "Ikke tilgængelig",
       "quantity_error_max": "Denne vare har en maksimumgrænse på {{ maximum }}",

@@ -26,9 +26,13 @@
       "post_success": "ขอบคุณที่ติดต่อเรา เราจะติดต่อกลับหาคุณโดยเร็วที่สุด",
       "error_heading": "โปรดแก้ไขข้อมูลดังต่อไปนี้"
     },
-    "slider_label": "แถบเลื่อน"
+    "slider_label": "แถบเลื่อน",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "เล่นโมเดล 3 มิติ",
     "play_video": "เล่นวิดีโอ",
     "unit_price": "ราคาต่อหน่วย",
@@ -130,6 +134,7 @@
     "back_to_main_menu": "กลับไปที่เมนูหลัก"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "รีวิว",
     "language": "ภาษา",
     "localization_region_and_language": "ภูมิภาคและภาษา",
@@ -318,6 +323,14 @@
       "added_to_cart": "เพิ่มลงในตะกร้าสินค้าแล้ว",
       "adding_to_cart": "กำลังเพิ่ม...",
       "add_to_cart_error": "เกิดข้อผิดพลาดขณะเพิ่มสินค้าในตะกร้า",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "ขายหมดแล้ว",
       "unavailable": "ไม่พร้อมจำหน่าย",
       "quantity_error_max": "สินค้านี้มีจำนวนสูงสุดที่ {{ maximum }} รายการ",

@@ -26,9 +26,13 @@
       "post_success": "Bizimle iletişime geçtiğiniz için teşekkür ederiz. Mümkün olan en kısa sürede size dönüş yapacağız.",
       "error_heading": "Lütfen aşağıdakileri düzenleyin:"
     },
-    "slider_label": "Kaydırıcı"
+    "slider_label": "Kaydırıcı",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "3B modeli oynat",
     "play_video": "Videoyu oynat",
     "unit_price": "Birim fiyatı",
@@ -130,6 +134,7 @@
     "zoom_media": "Medyayı yakınlaştır: {{ index }}"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "değerlendirme",
     "language": "Dil",
     "localization_region_and_language": "Bölge ve dil",
@@ -341,7 +346,15 @@
       "adding_to_cart": "Ekleniyor...",
       "added_to_cart": "Sepete eklendi",
       "add_to_cart_error": "Sepete eklenirken hata oluştu",
+      "choose_options": "Choose options",
       "quantity_error_max": "Bu ürün için maksimum değer: {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Tükendi",
       "unavailable": "Kullanılamıyor",
       "quantity": "Adet",

@@ -26,9 +26,13 @@
       "post_success": "Grazie per averci contattato. Risponderemo il prima possibile.",
       "error_heading": "Correggi gli errori seguenti:"
     },
-    "slider_label": "Cursore"
+    "slider_label": "Cursore",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Riproduci modello 3D",
     "play_video": "Riproduci video",
     "unit_price": "Prezzo unitario",
@@ -132,6 +136,7 @@
     "back_to_main_menu": "Torna al menu principale"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "recensioni",
     "no_results_found": "Nessun risultato trovato",
     "language": "Lingua",
@@ -348,7 +353,15 @@
       "adding_to_cart": "Aggiunta in corso...",
       "added_to_cart": "Aggiunto al carrello",
       "add_to_cart_error": "Errore durante l'aggiunta al carrello",
+      "choose_options": "Choose options",
       "quantity_error_max": "Questo articolo ha un massimo di {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Esaurito",
       "unavailable": "Non disponibile",
       "quantity": "Quantità",
