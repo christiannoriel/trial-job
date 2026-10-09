@@ -1,0 +1,149 @@
+{%- doc -%}
+  Renders a static "buy now, pay later" message (e.g. "Or 4 payments of $12.00 with afterpay").
+
+  The design calls for Afterpay messaging, which normally comes from the provider's app.
+  This block is a static, dependency-free stand-in, so it costs nothing on page load.
+  To go live, replace it with the provider's app block (Afterpay On-Site Messaging or
+  Klarna On-site Messaging) in the theme editor. Both render a placement element and load
+  their script asynchronously; keep that script deferred so it never blocks the buy box.
+
+  Wrapped in Horizon's `product-price` element so the amount updates on variant change
+  through the existing price-update flow, with no extra JavaScript.
+
+  @example
+  {% content_for 'block', type: 'custom-installments-message', id: 'installments' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign count = block_settings.installments
+  assign installment = variant.price | times: 1.0 | divided_by: count | round
+
+  capture installment_price
+    render 'format-price', price: installment
+  endcapture
+-%}
+
+{%- if product != blank and variant.price > 0 -%}
+  <product-price
+    class="installments-message spacing-style"
+    style="{% render 'spacing-style', settings: block_settings %}"
+    data-block-id="{{ block.id }}"
+    data-product-id="{{ product.id }}"
+    {{ block.shopify_attributes }}
+  >
+    <p
+      class="installments-message__text"
+      ref="priceContainer"
+    >
+      {{ 'content.installments_message_html' | t: count: count, amount: installment_price }}
+      {% if block_settings.logo != blank %}
+        {{
+          block_settings.logo
+          | image_url: width: 160
+          | image_tag:
+            class: 'installments-message__logo',
+            alt: block_settings.provider,
+            height: 14,
+            loading: 'lazy'
+        }}
+      {% else %}
+        <span class="installments-message__provider">{{ block_settings.provider | escape }}</span>
+      {% endif %}
+    </p>
+  </product-price>
+{%- endif -%}
+
+{% stylesheet %}
+  .installments-message {
+    display: block;
+    width: 100%;
+  }
+
+  .installments-message__text {
+    margin: 0;
+    font-size: var(--font-size--xs);
+    overflow-wrap: anywhere;
+  }
+
+  .installments-message__text strong {
+    font-weight: var(--font-heading--weight);
+  }
+
+  .installments-message__provider {
+    font-weight: var(--font-heading--weight);
+    letter-spacing: -0.02em;
+  }
+
+  .installments-message__logo {
+    display: inline-block;
+    height: 1em;
+    width: auto;
+    vertical-align: middle;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.installments_message",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:info.installments_message_static"
+    },
+    {
+      "type": "range",
+      "id": "installments",
+      "label": "t:settings.number_of_payments",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "provider",
+      "label": "t:settings.provider_name",
+      "default": "afterpay"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "t:settings.provider_logo"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.installments_message",
+      "category": "t:categories.product"
+    }
+  ]
+}
+{% endschema %}

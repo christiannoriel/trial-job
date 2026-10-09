@@ -1,0 +1,109 @@
+{%- doc -%}
+  Renders bundle quantity tiers ("Buy 1 / Buy 2 / Buy 3") as a native radio group named
+  `quantity`. Rendered by buy-buttons inside the product form in place of the quantity
+  stepper, so the selected tier is submitted with the form even before JavaScript loads.
+
+  The component exposes `getValue()` under `ref="quantitySelector"`, which is the
+  contract product-form.js already uses to read the quantity for queued adds.
+
+  Tier prices are display-only. The matching discount is applied at checkout by
+  automatic discounts in Shopify admin, so keep each tier's percentage in sync with them.
+
+  @example
+  {% content_for 'block', type: 'custom-quantity-tiers', id: 'quantity-tiers' %}
+{%- enddoc -%}
+
+{%- assign product = closest.product -%}
+
+<script
+  src="{{ 'custom-quantity-tiers.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<quantity-tiers-component
+  class="quantity-tiers"
+  ref="quantitySelector"
+  data-block-id="{{ block.id }}"
+  data-product-id="{{ product.id }}"
+  {{ block.shopify_attributes }}
+>
+  <fieldset
+    class="quantity-tiers__fieldset"
+    on:change="/handleChange"
+  >
+    <legend class="visually-hidden">{{ 'products.product.quantity_tiers.legend' | t }}</legend>
+    <div class="quantity-tiers__options">
+      {% content_for 'blocks' %}
+    </div>
+  </fieldset>
+</quantity-tiers-component>
+
+{% stylesheet %}
+  .quantity-tiers {
+    display: block;
+    width: 100%;
+  }
+
+  .quantity-tiers__fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+
+  .quantity-tiers__options {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    grid-auto-flow: column;
+    gap: var(--gap-sm);
+
+    /* Room for the badges that sit on the top border. */
+    padding-block-start: 0.6em;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.quantity_tiers",
+  "tag": null,
+  "blocks": [
+    {
+      "type": "_custom-quantity-tier"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.quantity_tiers",
+      "blocks": {
+        "tier_1": {
+          "type": "_custom-quantity-tier",
+          "settings": {
+            "quantity": 1,
+            "discount_percent": 0,
+            "free_shipping": false
+          }
+        },
+        "tier_2": {
+          "type": "_custom-quantity-tier",
+          "settings": {
+            "quantity": 2,
+            "discount_percent": 15,
+            "free_shipping": true,
+            "selected": true
+          }
+        },
+        "tier_3": {
+          "type": "_custom-quantity-tier",
+          "settings": {
+            "quantity": 3,
+            "discount_percent": 20,
+            "free_shipping": true
+          }
+        }
+      },
+      "block_order": ["tier_1", "tier_2", "tier_3"]
+    }
+  ]
+}
+{% endschema %}

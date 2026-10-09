@@ -26,9 +26,13 @@
       "post_success": "Dziękujemy za skontaktowanie się z nami. Odpowiemy tak szybko, jak to możliwe.",
       "error_heading": "Dostosuj następujące dane:"
     },
-    "slider_label": "Suwak"
+    "slider_label": "Suwak",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Odtwórz model 3D",
     "play_video": "Odtwórz film",
     "unit_price": "Cena jednostkowa",
@@ -134,6 +138,7 @@
     "back_to_main_menu": "Wróć do menu głównego"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "recenzje",
     "language": "Język",
     "localization_region_and_language": "Region i język",
@@ -355,7 +360,15 @@
       "adding_to_cart": "Trwa dodawanie...",
       "added_to_cart": "Dodano do koszyka",
       "add_to_cart_error": "Błąd podczas dodawania do koszyka",
+      "choose_options": "Choose options",
       "quantity_error_max": "Pozycja ma maksymalny limit {{ maximum }}",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Wyprzedane",
       "unavailable": "Niedostępny",
       "quantity": "Ilość",

@@ -1,0 +1,78 @@
+{%- doc -%}
+  Renders a compact, read-only star rating from the standard `reviews.rating` and
+  `reviews.rating_count` product metafields. Review apps such as Judge.me, Okendo and
+  Yotpo write to these, so the stars switch to live data when an app is installed,
+  with no theme change. Renders nothing when the product has no rating.
+
+  @param {product} product - Product whose rating metafields are read
+  @param {boolean} [show_count] - Show the review count in parentheses after the stars
+  @param {string} [class] - Extra classes for the wrapper
+
+  @example
+  {% render 'custom-star-rating', product: product, show_count: true %}
+{%- enddoc -%}
+
+{%- liquid
+  assign rating = product.metafields.reviews.rating.value.rating
+  assign scale_max = product.metafields.reviews.rating.value.scale_max | default: 5
+  assign rating_count = product.metafields.reviews.rating_count.value
+-%}
+
+{%- if rating != blank -%}
+  {%- liquid
+    assign rating_percent = rating | times: 100.0 | divided_by: scale_max | round: 1
+    assign rating_rounded = rating | round: 1
+  -%}
+  <div class="star-rating{% if class != blank %} {{ class }}{% endif %}">
+    <span
+      class="star-rating__stars"
+      role="img"
+      aria-label="{{ 'accessibility.rating' | t: rating: rating_rounded }}"
+      style="--star-rating-percent: {{ rating_percent }}%; --star-rating-count: {{ scale_max }};"
+    ></span>
+    {%- if show_count and rating_count != blank -%}
+      <span class="star-rating__count">
+        <span aria-hidden="true">({{ rating_count }})</span>
+        <span class="visually-hidden">{{ rating_count }} {{ 'content.reviews' | t }}</span>
+      </span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .star-rating {
+    --star-size: 0.9rem;
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-2xs);
+    color: var(--star-rating-color, var(--color-foreground));
+  }
+
+  /* One element, masked to N stars; the gradient fills the rated portion. */
+  .star-rating__stars {
+    display: block;
+    inline-size: calc((var(--star-size) + 0.2rem) * var(--star-rating-count));
+    block-size: var(--star-size);
+    background: linear-gradient(
+      90deg,
+      currentColor var(--star-rating-percent),
+      rgb(var(--color-foreground-rgb) / var(--opacity-20)) var(--star-rating-percent)
+    );
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M31.547 12a.848.848 0 00-.677-.577l-9.427-1.376-4.224-8.532a.847.847 0 00-1.516 0l-4.218 8.534-9.427 1.355a.847.847 0 00-.467 1.467l6.823 6.664-1.612 9.375a.847.847 0 001.23.893l8.428-4.434 8.432 4.432a.847.847 0 001.229-.894l-1.615-9.373 6.822-6.665a.845.845 0 00.214-.869z'/%3E%3C/svg%3E")
+      0 0 / calc(var(--star-size) + 0.2rem) var(--star-size) repeat-x;
+  }
+
+  [dir='rtl'] .star-rating__stars {
+    background: linear-gradient(
+      270deg,
+      currentColor var(--star-rating-percent),
+      rgb(var(--color-foreground-rgb) / var(--opacity-20)) var(--star-rating-percent)
+    );
+    mask-position: 100% 0;
+  }
+
+  .star-rating__count {
+    font-size: var(--font-size--xs);
+  }
+{% endstylesheet %}

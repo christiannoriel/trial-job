@@ -1,0 +1,190 @@
+{%- doc -%}
+  Renders a short list of product facts, either as a checklist (benefits) or as an
+  inline, dot-separated list with an optional heading (e.g. "Suitable for").
+
+  Items come from a rich text setting so merchants can either type a bullet list or
+  connect a `list.single_line_text_field` product metafield as a dynamic source, which
+  Shopify outputs as `<ul><li>` markup. Only list items are styled; other rich text
+  renders as normal paragraphs.
+
+  @example
+  {% content_for 'block', type: 'custom-feature-list', id: 'benefits' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign block_settings = block.settings
+  assign heading_id = 'FeatureList-' | append: block.id
+-%}
+
+{%- if block_settings.items != blank -%}
+  <div
+    class="feature-list feature-list--{{ block_settings.style }} spacing-style"
+    style="{% render 'spacing-style', settings: block_settings %}"
+    {% if block_settings.heading != blank %}
+      role="group"
+      aria-labelledby="{{ heading_id }}"
+    {% endif %}
+    {{ block.shopify_attributes }}
+  >
+    {%- if block_settings.heading != blank -%}
+      <p
+        id="{{ heading_id }}"
+        class="feature-list__heading"
+      >
+        {{ block_settings.heading | escape }}
+      </p>
+    {%- endif -%}
+    <div class="feature-list__items rte">
+      {{ block_settings.items }}
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .feature-list {
+    --feature-list-icon-size: 1.1em;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+    min-width: 0;
+    width: 100%;
+  }
+
+  .feature-list__heading {
+    margin: 0;
+    font-weight: var(--font-heading--weight);
+  }
+
+  .feature-list__items :is(ul, ol) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .feature-list__items li {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .feature-list__items p {
+    margin: 0;
+  }
+
+  /* Checklist: icon drawn with a mask so it inherits the active text color. */
+  .feature-list--checklist .feature-list__items :is(ul, ol) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+  }
+
+  .feature-list--checklist .feature-list__items li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--gap-xs);
+  }
+
+  .feature-list--checklist .feature-list__items li::before {
+    content: '';
+    flex: 0 0 auto;
+    inline-size: var(--feature-list-icon-size);
+    block-size: var(--feature-list-icon-size);
+    margin-block-start: 0.15em;
+    background-color: currentColor;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black'%3E%3Ccircle cx='10' cy='10' r='8.5'/%3E%3Cpath d='m6.6 10.2 2.3 2.3 4.6-4.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+  }
+
+  /* Inline: uppercase, dot-separated values beside a vertical rule. */
+  .feature-list--inline .feature-list__items {
+    padding-inline-start: var(--padding-sm);
+    border-inline-start: var(--style-border-width) solid var(--color-foreground);
+    font-size: var(--font-size--sm);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .feature-list--inline .feature-list__items :is(ul, ol) {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.6em;
+    row-gap: 0.1em;
+  }
+
+  .feature-list--inline .feature-list__items li:not(:last-child)::after {
+    content: '\2022';
+    margin-inline-start: 0.6em;
+    font-size: 0.7em;
+    vertical-align: middle;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.feature_list",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:settings.style",
+      "options": [
+        {
+          "value": "checklist",
+          "label": "t:options.checklist"
+        },
+        {
+          "value": "inline",
+          "label": "t:options.inline_list"
+        }
+      ],
+      "default": "checklist"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:settings.heading"
+    },
+    {
+      "type": "richtext",
+      "id": "items",
+      "label": "t:settings.feature_list_items",
+      "info": "t:info.feature_list_items"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.feature_list",
+      "category": "t:categories.product",
+      "settings": {
+        "style": "checklist",
+        "items": "<ul><li>Softer, smoother hair from the first use</li><li>Makes hair easier to brush after swimming</li></ul>"
+      }
+    }
+  ]
+}
+{% endschema %}

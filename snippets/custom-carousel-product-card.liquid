@@ -1,0 +1,273 @@
+{%- doc -%}
+  Renders a compact product card for the product carousel: image, rating, title,
+  short description, price and an add to cart button.
+
+  Single-variant products add straight to the cart through Horizon's
+  product-form-component, so the cart drawer, cart count and fly-to-cart animation work
+  unchanged. Products with options link to the product page instead, so a shopper never
+  adds a variant they didn't choose.
+
+  @param {product} product - Product to render (blank renders a placeholder card)
+  @param {string} section_id - Owning section ID, used to keep form IDs unique
+  @param {boolean} [show_rating] - Show the star rating (from `reviews.*` metafields)
+  @param {boolean} [show_description] - Show the short description
+  @param {boolean} [show_button] - Show the add to cart / choose options button
+  @param {string} [button_class] - Button style class: 'button' or 'button-secondary'
+  @param {string} [sizes] - `sizes` attribute for the product image
+
+  @example
+  {% render 'custom-carousel-product-card', product: product, section_id: section.id, show_rating: true %}
+{%- enddoc -%}
+
+{% render 'add-to-cart-button-styles' %}
+{% render 'fly-to-cart-styles' %}
+
+{%- liquid
+  assign button_class = button_class | default: 'button'
+  assign sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+  assign title_id = 'CarouselCardTitle-' | append: section_id | append: '-' | append: product.id
+
+  assign description = product.metafields.custom.subtitle.value
+  if description == blank
+    assign description = product.description | strip_html | truncatewords: 8
+  endif
+
+  assign variant = product.selected_or_first_available_variant
+-%}
+
+<article
+  class="carousel-card"
+  {% if product != blank %}
+    aria-labelledby="{{ title_id }}"
+  {% endif %}
+>
+  {%- if product != blank -%}
+    {%- comment -%} Image link is a duplicate of the title link, so it's hidden from keyboard and screen readers. {%- endcomment -%}
+    <a
+      href="{{ product.url }}"
+      class="carousel-card__media"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      {%- if product.featured_media != blank -%}
+        {{
+          product.featured_media
+          | image_url: width: 960
+          | image_tag:
+            widths: '240, 360, 480, 640, 960',
+            sizes: sizes,
+            loading: 'lazy',
+            alt: '',
+            class: 'carousel-card__image'
+        }}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'carousel-card__image' }}
+      {%- endif -%}
+    </a>
+
+    <div class="carousel-card__body">
+      {%- if show_rating -%}
+        {% render 'custom-star-rating', product: product, class: 'carousel-card__rating' %}
+      {%- endif -%}
+
+      <h3
+        class="carousel-card__title"
+        id="{{ title_id }}"
+      >
+        <a
+          href="{{ product.url }}"
+          class="carousel-card__link"
+        >
+          {{- product.title | escape -}}
+        </a>
+      </h3>
+
+      {%- if show_description and description != blank -%}
+        <p class="carousel-card__description">{{ description | escape }}</p>
+      {%- endif -%}
+
+      <div class="carousel-card__price">
+        {% render 'price', product_resource: product, show_sale_price_first: true %}
+      </div>
+    </div>
+
+    {%- if show_button -%}
+      <div class="carousel-card__actions">
+        {%- if product.has_only_default_variant -%}
+          {%- liquid
+            assign form_id = 'CarouselCardForm-' | append: section_id | append: '-' | append: product.id
+            assign submit_id = form_id | append: '-submit'
+            if variant.available
+              assign can_add_to_cart = true
+              assign add_to_cart_text = 'products.product.add_to_cart' | t
+            else
+              assign can_add_to_cart = false
+              assign add_to_cart_text = 'products.product.sold_out' | t
+            endif
+          -%}
+          <product-form-component
+            class="carousel-card__form"
+            data-section-id="{{ section_id }}"
+            data-product-id="{{ product.id }}"
+            data-product-url="{{ product.url }}"
+            data-quantity-default="{{ variant.quantity_rule.min | default: 1 }}"
+            data-quantity-error-max="{{ 'products.product.quantity_error_max' | t }}"
+            on:submit="/handleSubmit"
+          >
+            <div
+              class="visually-hidden"
+              aria-live="assertive"
+              role="status"
+              aria-atomic="true"
+              ref="liveRegion"
+            ></div>
+            {%- form 'product', product, id: form_id, data-type: 'add-to-cart-form' -%}
+              <input
+                type="hidden"
+                name="id"
+                ref="variantId"
+                value="{{ variant.id }}"
+              >
+              <input
+                type="hidden"
+                name="quantity"
+                value="{{ variant.quantity_rule.min | default: 1 }}"
+              >
+              {% render 'add-to-cart-button',
+                id: submit_id,
+                class: button_class,
+                can_add_to_cart: can_add_to_cart,
+                show_icon: false,
+                product: product,
+                add_to_cart_text: add_to_cart_text
+              %}
+            {%- endform -%}
+          </product-form-component>
+        {%- else -%}
+          <a
+            href="{{ product.url }}"
+            class="{{ button_class }} carousel-card__choose"
+            aria-describedby="{{ title_id }}"
+          >
+            {{- 'products.product.choose_options' | t -}}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  {%- else -%}
+    <div class="carousel-card__media">
+      {{ 'product-1' | placeholder_svg_tag: 'carousel-card__image' }}
+    </div>
+    <div class="carousel-card__body">
+      <p class="carousel-card__title">{{ 'placeholders.product_title' | t }}</p>
+      <div class="carousel-card__price">{% render 'format-price', price: 4800 %}</div>
+    </div>
+  {%- endif -%}
+</article>
+
+{% stylesheet %}
+  .carousel-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    height: 100%;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .carousel-card__media {
+    display: block;
+    aspect-ratio: var(--carousel-card-ratio, 1);
+    overflow: hidden;
+    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-5));
+  }
+
+  .carousel-card__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--animation-speed-slow) var(--ease-out-cubic);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .carousel-card:hover .carousel-card__image {
+      transform: scale(1.03);
+    }
+  }
+
+  .carousel-card__body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-2xs);
+    min-width: 0;
+  }
+
+  .carousel-card__rating {
+    margin-block-end: var(--margin-2xs);
+  }
+
+  .carousel-card__title {
+    margin: 0;
+    font-family: var(--font-body--family);
+    font-size: var(--font-size--sm);
+    font-weight: var(--font-heading--weight);
+    line-height: 1.3;
+    text-transform: none;
+    overflow-wrap: anywhere;
+  }
+
+  .carousel-card__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .carousel-card__link:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .carousel-card__description {
+    margin: 0;
+    font-size: var(--font-size--xs);
+    color: var(--color-foreground-muted);
+    overflow-wrap: anywhere;
+  }
+
+  .carousel-card__price {
+    margin-block-start: var(--margin-2xs);
+    font-weight: var(--font-heading--weight);
+  }
+
+  /* Buttons line up across cards whatever the title or description length. */
+  .carousel-card__actions {
+    margin-block-start: auto;
+    padding-inline: var(--padding-sm);
+  }
+
+  /* Matches the product page add to cart (buy-buttons-styles): same height, theme button font.
+     min-height rather than height so a long translated label can wrap. */
+  .carousel-card__actions :is(.button, .button-secondary) {
+    width: 100%;
+    min-height: calc(var(--padding-md) * 2 + var(--icon-size-sm));
+    padding-block: 0;
+  }
+
+  .carousel-card__choose {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .carousel-card__actions {
+      padding-inline: 0;
+    }
+
+    .carousel-card__actions :is(.button, .button-secondary) {
+      padding-inline: var(--padding-xs);
+    }
+  }
+{% endstylesheet %}

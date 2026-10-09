@@ -349,7 +349,7 @@
       "choose_options": "Choose options",
       "quantity_error_max": "Denne varen har et maksimumsantall på {{ maximum }}",
       "quantity_tiers": {
-        "button_total": " - {{ total }}",
+        "button_total": "- {{ total }}",
         "free_shipping": "+ Free shipping",
         "label": "Buy {{ quantity }}",
         "legend": "Choose a bundle",

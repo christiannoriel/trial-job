@@ -1,0 +1,245 @@
+{%- doc -%}
+  Renders a horizontally scrolling list built on CSS scroll snap, with previous/next
+  buttons. Native scrolling handles touch, trackpads and momentum; `custom-scroll-carousel.js`
+  adds the buttons, arrow-key navigation and mouse dragging. Without JavaScript it is
+  still a usable, swipeable list.
+
+  This snippet owns the carousel CSS. Every consumer renders it, so the styles ship
+  wherever the markup does.
+
+  @param {string} id - Unique ID for the track, e.g. 'ScrollCarousel-' | append: section.id
+  @param {string} items - Captured `<li class="scroll-carousel__item">` markup
+  @param {string} label - Accessible name for the carousel region
+  @param {number} [columns] - Items fully visible on desktop (default 4)
+  @param {number} [columns_tablet] - Items visible on tablet, 750–989px (default 3)
+  @param {number} [columns_mobile] - Items visible on mobile below 750px; fractions show a peek of the next item (default 1.6)
+  @param {string} [mobile_layout] - 'carousel' (default) or 'grid' (2-column grid on mobile, no scrolling)
+  @param {string} [arrow_style] - 'outside' (default, beside the track) or 'overlay' (small buttons over the edges)
+  @param {string} [class] - Extra classes for the wrapper
+
+  @example
+  {% render 'custom-scroll-carousel', id: carousel_id, items: items, label: section.settings.heading, columns: 4 %}
+{%- enddoc -%}
+
+{%- liquid
+  assign columns = columns | default: 4
+  assign columns_tablet = columns_tablet | default: 3
+  assign columns_mobile = columns_mobile | default: 1.6
+  assign mobile_layout = mobile_layout | default: 'carousel'
+  assign arrow_style = arrow_style | default: 'outside'
+-%}
+
+<script
+  src="{{ 'custom-scroll-carousel.js' | asset_url }}"
+  type="module"
+  fetchpriority="low"
+></script>
+
+<scroll-carousel-component
+  class="scroll-carousel scroll-carousel--arrows-{{ arrow_style }} scroll-carousel--mobile-{{ mobile_layout }}{% if class != blank %} {{ class }}{% endif %}"
+  style="--scroll-carousel-columns: {{ columns }}; --scroll-carousel-columns-tablet: {{ columns_tablet }}; --scroll-carousel-columns-mobile: {{ columns_mobile }};"
+  role="region"
+  aria-roledescription="{{ 'accessibility.carousel' | t }}"
+  aria-label="{{ label | strip_html | escape }}"
+>
+  <div class="scroll-carousel__viewport">
+    <button
+      type="button"
+      class="scroll-carousel__arrow scroll-carousel__arrow--previous button-unstyled"
+      ref="previousButton"
+      on:click="/previous"
+      aria-controls="{{ id }}"
+      aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+      aria-disabled="true"
+      hidden
+    >
+      <span class="svg-wrapper">{{ 'icon-chevron-left.svg' | inline_asset_content }}</span>
+    </button>
+
+    <ul
+      id="{{ id }}"
+      class="scroll-carousel__track list-unstyled"
+      ref="track"
+      role="list"
+    >
+      {{ items }}
+    </ul>
+
+    <button
+      type="button"
+      class="scroll-carousel__arrow scroll-carousel__arrow--next button-unstyled"
+      ref="nextButton"
+      on:click="/next"
+      aria-controls="{{ id }}"
+      aria-label="{{ 'accessibility.slideshow_next' | t }}"
+      aria-disabled="true"
+      hidden
+    >
+      <span class="svg-wrapper">{{ 'icon-chevron-right.svg' | inline_asset_content }}</span>
+    </button>
+  </div>
+</scroll-carousel-component>
+
+{% stylesheet %}
+  .scroll-carousel {
+    --scroll-carousel-gap: var(--gap-md);
+    --scroll-carousel-arrow-size: var(--minimum-touch-target);
+    --scroll-carousel-visible: var(--scroll-carousel-columns);
+
+    display: block;
+    min-width: 0;
+  }
+
+  .scroll-carousel__viewport {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: center;
+  }
+
+  /* position: relative makes the track the containing block for absolutely positioned
+     children (e.g. visually-hidden text in off-screen cards), so it clips them instead of
+     them widening the page. */
+  .scroll-carousel__track {
+    position: relative;
+    display: flex;
+    gap: var(--scroll-carousel-gap);
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .scroll-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scroll-carousel__item {
+    flex: 0 0
+      calc(
+        (100% - var(--scroll-carousel-gap) * (var(--scroll-carousel-visible) - 1)) / var(--scroll-carousel-visible)
+      );
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .scroll-carousel__item img {
+    -webkit-user-drag: none;
+  }
+
+  .scroll-carousel[data-dragging] .scroll-carousel__track {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .scroll-carousel__arrow {
+    display: grid;
+    place-items: center;
+    inline-size: var(--scroll-carousel-arrow-size);
+    block-size: var(--scroll-carousel-arrow-size);
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: opacity var(--animation-speed) var(--animation-easing);
+  }
+
+  .scroll-carousel__arrow[hidden] {
+    display: none;
+  }
+
+  .scroll-carousel__arrow[aria-disabled='true'] {
+    cursor: default;
+    opacity: var(--opacity-30);
+  }
+
+  .scroll-carousel__arrow .svg-wrapper {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+  }
+
+  [dir='rtl'] .scroll-carousel__arrow .svg-wrapper {
+    transform: scaleX(-1);
+  }
+
+  /* Arrows beside the track. */
+  .scroll-carousel--arrows-outside .scroll-carousel__viewport:has(.scroll-carousel__arrow:not([hidden])) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: var(--gap-xs);
+  }
+
+  /* Small round buttons over the track edges. */
+  .scroll-carousel--arrows-overlay .scroll-carousel__arrow {
+    --scroll-carousel-arrow-size: 1.5rem;
+
+    position: absolute;
+    z-index: 1;
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    border-radius: 50%;
+    background-color: rgb(var(--color-background-rgb) / var(--opacity-90));
+    box-shadow: 0 1px 4px rgb(var(--color-shadow-rgb) / var(--opacity-20));
+  }
+
+  /* Keep a full touch target around the small visual button. */
+  .scroll-carousel--arrows-overlay .scroll-carousel__arrow::after {
+    content: '';
+    position: absolute;
+    inset: calc((var(--minimum-touch-target) - 100%) / -2);
+  }
+
+  .scroll-carousel--arrows-overlay .scroll-carousel__arrow[aria-disabled='true'] {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .scroll-carousel--arrows-overlay .scroll-carousel__arrow--previous {
+    inset-inline-start: var(--padding-xs);
+  }
+
+  .scroll-carousel--arrows-overlay .scroll-carousel__arrow--next {
+    inset-inline-end: var(--padding-xs);
+  }
+
+  .scroll-carousel--arrows-overlay .scroll-carousel__arrow .svg-wrapper {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+  }
+
+  @media screen and (max-width: 989px) {
+    .scroll-carousel {
+      --scroll-carousel-visible: var(--scroll-carousel-columns-tablet);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .scroll-carousel {
+      --scroll-carousel-gap: var(--gap-sm);
+      --scroll-carousel-visible: var(--scroll-carousel-columns-mobile);
+    }
+
+    .scroll-carousel--mobile-grid .scroll-carousel__track {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--gap-xl);
+      overflow: visible;
+    }
+
+    .scroll-carousel--mobile-grid .scroll-carousel__arrow {
+      display: none;
+    }
+
+    .scroll-carousel--mobile-grid .scroll-carousel__viewport {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-carousel__track {
+      scroll-behavior: auto;
+    }
+  }
+{% endstylesheet %}

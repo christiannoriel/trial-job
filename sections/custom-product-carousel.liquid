@@ -1,0 +1,355 @@
+{% comment %}
+  Section contract.
+  A merchandised product row ("Shop the routine"): a heading area built from text blocks,
+  then products from a hand-picked list or a collection in a scroll-snap carousel.
+  On mobile it can become a 2-column grid, as in the design.
+  @example
+  <!-- Theme editor > Add section > "Product carousel". Pick products or a collection,
+       edit the heading text blocks, and choose the mobile layout. -->
+{% endcomment %}
+
+{%- liquid
+  assign section_settings = section.settings
+  assign max_products = section_settings.max_products
+  assign carousel_id = 'ProductCarousel-' | append: section.id
+  assign columns = section_settings.columns
+  assign columns_tablet = columns | at_most: 3
+
+  if section_settings.products != blank
+    assign products = section_settings.products
+  elsif section_settings.collection != blank
+    assign products = section_settings.collection.products
+  endif
+
+  if section_settings.button_style == 'secondary'
+    assign button_class = 'button-secondary'
+  else
+    assign button_class = 'button'
+  endif
+
+  assign desktop_image_vw = 100 | divided_by: columns
+  assign image_sizes = '(min-width: 990px) ' | append: desktop_image_vw | append: 'vw, (min-width: 750px) 33vw, 50vw'
+
+  if section_settings.background_color != blank
+    render 'contrast-override', background_color: section_settings.background_color, section_id: section.id
+  endif
+
+  capture header_blocks
+    content_for 'blocks'
+  endcapture
+-%}
+
+{% capture items %}
+  {%- if products != blank -%}
+    {%- for product in products limit: max_products -%}
+      <li class="scroll-carousel__item">
+        {% render 'custom-carousel-product-card',
+          product: product,
+          section_id: section.id,
+          show_rating: section_settings.show_rating,
+          show_description: section_settings.show_description,
+          show_button: section_settings.show_button,
+          button_class: button_class,
+          sizes: image_sizes
+        %}
+      </li>
+    {%- endfor -%}
+  {%- else -%}
+    {%- for i in (1..4) -%}
+      <li class="scroll-carousel__item">
+        {% render 'custom-carousel-product-card', product: blank, section_id: section.id %}
+      </li>
+    {%- endfor -%}
+  {%- endif -%}
+{% endcapture %}
+
+<div
+  class="section-background{% if section_settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
+></div>
+<div
+  class="
+    section
+    section--{{ section_settings.section_width }}
+    product-carousel
+    spacing-style
+    {% if section_settings.background_color != blank %}color-custom-{{ section.id }}{% endif %}
+  "
+  style="
+    {% render 'spacing-style', settings: section_settings %}
+    --product-carousel-star-color: {{ section_settings.star_color | default: 'currentColor' }};
+    --carousel-card-ratio: {{ section_settings.image_ratio }};
+  "
+>
+  {%- if header_blocks != blank -%}
+    <div class="product-carousel__header">
+      {{ header_blocks }}
+    </div>
+  {%- endif -%}
+
+  {% liquid
+    assign carousel_label = section_settings.accessible_label
+    if carousel_label == blank
+      assign carousel_label = 'content.featured_products' | t
+    endif
+  %}
+  {% render 'custom-scroll-carousel',
+    id: carousel_id,
+    items: items,
+    label: carousel_label,
+    columns: columns,
+    columns_tablet: columns_tablet,
+    columns_mobile: 1.6,
+    mobile_layout: section_settings.mobile_layout,
+    arrow_style: 'outside',
+    class: 'product-carousel__carousel'
+  %}
+</div>
+
+{% stylesheet %}
+  .product-carousel {
+    row-gap: var(--gap-xl);
+  }
+
+  .product-carousel__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-xs);
+    text-align: center;
+  }
+
+  .product-carousel .star-rating {
+    --star-rating-color: var(--product-carousel-star-color);
+  }
+
+  .product-carousel__carousel {
+    --scroll-carousel-gap: var(--gap-lg);
+  }
+
+  @media screen and (max-width: 749px) {
+    .product-carousel__carousel {
+      --scroll-carousel-gap: var(--gap-sm);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:names.product_carousel",
+  "blocks": [
+    {
+      "type": "text"
+    },
+    {
+      "type": "button"
+    }
+  ],
+  "settings": [
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "t:settings.products",
+      "limit": 12,
+      "info": "t:info.product_carousel_products"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:settings.collection",
+      "info": "t:info.product_carousel_collection"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "t:settings.product_count",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "text",
+      "id": "accessible_label",
+      "label": "t:settings.accessible_label",
+      "info": "t:info.product_carousel_label"
+    },
+    {
+      "type": "header",
+      "content": "t:content.layout"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:settings.columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "t:settings.mobile_layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "t:options.grid"
+        },
+        {
+          "value": "carousel",
+          "label": "t:options.carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "t:settings.width",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "t:options.page"
+        },
+        {
+          "value": "full-width",
+          "label": "t:options.full"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "t:content.product_card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:settings.aspect_ratio",
+      "options": [
+        {
+          "value": "1",
+          "label": "t:options.square"
+        },
+        {
+          "value": "4 / 5",
+          "label": "t:options.portrait"
+        },
+        {
+          "value": "3 / 4",
+          "label": "t:options.tall"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "label": "t:settings.show_rating",
+      "info": "t:info.show_rating",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "star_color",
+      "label": "t:settings.star_color",
+      "visible_if": "{{ section.settings.show_rating }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "t:settings.show_description",
+      "info": "t:info.show_card_description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_button",
+      "label": "t:settings.show_add_to_cart",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:settings.button_style",
+      "options": [
+        {
+          "value": "primary",
+          "label": "t:options.primary"
+        },
+        {
+          "value": "secondary",
+          "label": "t:options.secondary"
+        }
+      ],
+      "default": "primary",
+      "visible_if": "{{ section.settings.show_button }}"
+    },
+    {
+      "type": "header",
+      "content": "t:content.colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "t:settings.background_color",
+      "placeholder": "t:settings.default"
+    },
+    {
+      "type": "header",
+      "content": "t:content.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "t:settings.top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "t:settings.bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:names.product_carousel",
+      "category": "t:categories.products",
+      "blocks": {
+        "eyebrow": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Shop the routine</p>",
+            "type_preset": "custom",
+            "font_size": "0.75rem",
+            "case": "uppercase",
+            "letter_spacing": "loose",
+            "alignment": "center",
+            "width": "100%"
+          }
+        },
+        "heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Whatever your hair problem, we've got a fix</h2>",
+            "type_preset": "h2",
+            "alignment": "center",
+            "width": "100%",
+            "wrap": "balance"
+          }
+        }
+      },
+      "block_order": ["eyebrow", "heading"]
+    }
+  ]
+}
+{% endschema %}

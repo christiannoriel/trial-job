@@ -349,7 +349,7 @@
       "choose_options": "Choose options",
       "quantity_error_max": "此品項上限為 {{ maximum }}",
       "quantity_tiers": {
-        "button_total": " - {{ total }}",
+        "button_total": "- {{ total }}",
         "free_shipping": "+ Free shipping",
         "label": "Buy {{ quantity }}",
         "legend": "Choose a bundle",

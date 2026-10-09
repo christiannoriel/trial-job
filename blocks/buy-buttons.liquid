@@ -111,7 +111,7 @@
           {%- endif -%}
 
           {%- if block_settings.quantity_selector == 'tiers' -%}
-            {% content_for 'block', type: 'quantity-tiers', id: 'quantity-tiers' %}
+            {% content_for 'block', type: 'custom-quantity-tiers', id: 'quantity-tiers' %}
           {%- else -%}
             {% content_for 'block', type: 'quantity', id: 'quantity' %}
           {%- endif -%}
@@ -658,17 +658,17 @@
           "static": true
         },
         "quantity-tiers": {
-          "type": "quantity-tiers",
+          "type": "custom-quantity-tiers",
           "static": true,
           "blocks": {
             "tier_1": {
-              "type": "_quantity-tier",
+              "type": "_custom-quantity-tier",
               "settings": {
                 "quantity": 1
               }
             },
             "tier_2": {
-              "type": "_quantity-tier",
+              "type": "_custom-quantity-tier",
               "settings": {
                 "quantity": 2,
                 "discount_percent": 15,
@@ -677,7 +677,7 @@
               }
             },
             "tier_3": {
-              "type": "_quantity-tier",
+              "type": "_custom-quantity-tier",
               "settings": {
                 "quantity": 3,
                 "discount_percent": 20,

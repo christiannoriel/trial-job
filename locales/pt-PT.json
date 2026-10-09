@@ -26,9 +26,13 @@
       "post_success": "Agradecemos o seu contacto. Responder-lhe-emos logo que possível.",
       "error_heading": "Ajuste o seguinte:"
     },
-    "slider_label": "Slider"
+    "slider_label": "Slider",
+    "video_carousel": {
+      "label": "Customer videos"
+    }
   },
   "accessibility": {
+    "carousel": "Carousel",
     "play_model": "Reproduzir modelo 3D",
     "play_video": "Reproduzir o vídeo",
     "unit_price": "Preço unitário",
@@ -132,6 +136,7 @@
     "back_to_main_menu": "Voltar ao menu principal"
   },
   "content": {
+    "installments_message_html": "Or {{ count }} payments of <strong>{{ amount }}</strong> with",
     "reviews": "avaliações",
     "language": "Idioma",
     "localization_region_and_language": "Região e idioma",
@@ -324,6 +329,14 @@
       "added_to_cart": "Adicionado ao carrinho",
       "adding_to_cart": "A adicionar...",
       "add_to_cart_error": "Erro ao adicionar ao carrinho",
+      "choose_options": "Choose options",
+      "quantity_tiers": {
+        "button_total": "- {{ total }}",
+        "free_shipping": "+ Free shipping",
+        "label": "Buy {{ quantity }}",
+        "legend": "Choose a bundle",
+        "save_percent": "Save {{ percent }}%"
+      },
       "sold_out": "Esgotado",
       "unavailable": "Indisponível",
       "quantity_error_max": "Este item tem um máximo de {{ maximum }}",

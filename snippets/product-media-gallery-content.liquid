@@ -153,6 +153,19 @@
   endcapture
   assign sizes = sizes | strip
 
+  # Mobile slideshow: above 1 slide per view, the next slide peeks in from the inline end.
+  assign slides_per_view_mobile = block_settings.slides_per_view_mobile | default: 1
+  assign mobile_peek = false
+  if slides_per_view_mobile > 1 and sorted_media.size > 1
+    assign mobile_peek = true
+    assign slideshow_gutters = 'start end'
+    assign mobile_peek_size = ', calc(100vw / ' | append: slides_per_view_mobile | append: ')'
+    assign sizes = sizes | replace_last: ', 100vw', mobile_peek_size
+    if needs_both_sizes
+      assign sizes_single = sizes_single | replace_last: ', 100vw', mobile_peek_size
+    endif
+  endif
+
   assign product_media_container_class = 'product-media-container'
   if block_settings.constrain_to_viewport
     assign product_media_container_class = product_media_container_class | append: ' constrain-height'
@@ -360,8 +373,11 @@
       {% if block_settings.extend_media %}
         media-gallery--extend
       {% endif %}
+      {% if mobile_peek %}
+        media-gallery--peek
+      {% endif %}
     "
-    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}"
+    style="{% render 'spacing-style', settings: block_settings %} --thumbnail-width: {{ block_settings.thumbnail_width }}px; --media-radius: {{ block_settings.media_radius }}px;{% if block_settings.icons_style contains 'large' %} --slideshow-icon-padding: 0px;{% endif %}--image-gap: {{ block_settings.image_gap }}px;{% unless block_settings.aspect_ratio == 'adapt' %} --gallery-aspect-ratio: {{ block_settings.aspect_ratio }};{% endunless %}{% if mobile_peek %} --media-gallery-slides-per-view-mobile: {{ slides_per_view_mobile }};{% endif %}"
     data-presentation="{{ media_presentation }}"
     {{ block_shopify_attributes }}
   >
@@ -453,6 +469,7 @@
       slideshow_arrows: slideshow_arrows,
       arrows_position: icons_position,
       animate_arrows: animate_arrows,
+      slideshow_gutters: slideshow_gutters,
       controls: controls
     %}
 
@@ -911,6 +928,28 @@
     .media-gallery__mobile-controls[thumbnails] .slideshow-controls__thumbnail {
       width: var(--thumbnail-width);
       height: auto;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .media-gallery--peek {
+      --slideshow-gap: var(--gap-xs);
+      --gutter-slide-width: var(--page-margin);
+
+      slideshow-slide {
+        scroll-snap-align: start;
+      }
+
+      /* After .media-gallery--hint so this width wins when both are set. 100% excludes the
+         gutters, so add the start gutter back to size slides against slide start to screen edge. */
+      :not(.dialog-zoomed-gallery) > .product-media-container:not(:only-child) {
+        --slide-width: calc(
+          (100% + var(--gutter-slide-width) + var(--slideshow-gap)) / var(--media-gallery-slides-per-view-mobile) -
+            var(--slideshow-gap)
+        );
+
+        width: var(--slide-width);
+      }
     }
   }
 
